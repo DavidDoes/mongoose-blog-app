@@ -6,7 +6,7 @@ const mongoose = require ('mongoose')
 mongoose.Promise = global.Promise
 
 const {PORT, DATABASE_URL} = require('./config')
-const {Restaurant} = require('./models')
+const {Blogpost} = require('./models')
 
 const app = express()
 app.use(express.json())
@@ -16,6 +16,7 @@ app.use(express.json())
 app.get('/posts', (req, res) => {
     Blogpost.find()
         .then(posts => {
+            console.log(posts)
             res.json({
                 posts: posts.map(post => post.serialize())
             })
@@ -49,15 +50,18 @@ app.post('/posts', (req, res) => {
         title: req.body.title,
         content: req.body.content,
         author: {
-            firstName: req.body.author.split(' ').slice(-2), //?
-            lastName: req.body.author.split(' ').slice(-1)
+            firstName: req.body.author.split(' ')[0],
+            lastName: req.body.author.split(' ')[1]
         }
     })
-    .then(post => res.status(201).json(post.serialize()))
+    .then(post => { //find blog post by id, stringify
+        Blogpost.findById(post.id)
+        .then(post => res.status(201).json(post.serialize())
+    )
+    })
     .catch(err => {
         console.error(err)
         res.status(500).json({ message: 'Internal server error' })
-    //how to return object?
     })
 })
 
@@ -135,3 +139,5 @@ function runServer(databaseUrl, port = PORT) {
   }
   
   module.exports = { app, runServer, closeServer };
+
+//   mongoimport --db mongoose-blog-app --collection blogposts --drop --file ~/Documents/projects/Databases/seed-data.json
