@@ -49,6 +49,7 @@ app.post('/posts', (req, res) => {
     Blogpost.create({
         title: req.body.title,
         content: req.body.content,
+        // one method of stringifying author name
         author: {
             firstName: req.body.author.split(' ')[0],
             lastName: req.body.author.split(' ')[1]
@@ -84,8 +85,8 @@ app.put('/posts/:id', (req, res) => {
     })
 
     Blogpost
-        .findByIdAndUpdate(req.params.id, {$set: toUpdate})
-        .then(post => res.status(204).end())
+        .findByIdAndUpdate(req.params.id, {$set: toUpdate}, {new: true})
+        .then(post => res.status(200).end())
         .catch(err => res.status(500).json({ message: 'Internal server error' }))
 })
 
