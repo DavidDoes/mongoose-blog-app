@@ -10,6 +10,7 @@ const {Blogpost} = require('./models')
 
 const app = express()
 app.use(express.json())
+app.use(morgan('common'))
 
 //GET requests should res with all posts in db
 // /posts/:id should res with single post with :id if exists, using schema
