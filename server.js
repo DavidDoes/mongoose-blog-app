@@ -113,7 +113,7 @@ app.put('/authors/:id', (req, res) => {
                 return res.status(400).send(message)
             } else {
                 Author
-                    .findByIdAndUpdate(req.paramas.id, {
+                    .findByIdAndUpdate(req.params.id, {
                         $set: toUpdate
                     }, {
                         new: true
