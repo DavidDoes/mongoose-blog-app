@@ -158,19 +158,17 @@ app.delete('/authors/:id', (req, res) => {
 //GET requests should res with all posts in db
 // /posts/:id should res with single post with :id if exists, using schema
 app.get('/posts', (req, res) => {
-    Blogpost.find() //find a blog post by doing:
+    Blogpost
+        .find() //find a blog post by doing:
         .then(posts => {
-            console.log(posts) //console log all posts
-            res.json({ //map thru, return json object of posts with structure
-                posts: posts.map(post => {
+            res.json(posts.map(post => { //map thru, return json object of posts with structure
                     return {
                         id: post._id,
                         author: post.authorName,
                         content: post.content,
                         title: post.title
                     }
-                })
-            })
+                }))
         })
         .catch(err => {
             console.error(err)
@@ -241,11 +239,6 @@ app.put('/posts/:id', (req, res) => { //if any of following not matching, return
         res.status(400).json({
             error: 'Request path id and request path body id must match'
         })
-        // const message = 
-        //     `Request path id (${req.params.id}) and request body id ` +
-        //     `(${req.body.id}) must match`
-        // console.error(message)
-        // return res.status(400).json({ message: message })
     }
 
     const toUpdate = {}
