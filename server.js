@@ -39,22 +39,6 @@ app.get('/authors', (req, res) => {
         })
 })
 
-app.get('/authors/:id', (req, res) => {
-    Blogpost.find()
-        .then(posts => {
-            console.log(posts)
-            res.json({
-                posts: posts.map(post => post.serialize())
-            })
-        })
-        .catch(err => {
-            console.error(err)
-            res.status(500).json({
-                message: 'Internal server error'
-            })
-        })
-})
-
 app.post('/authors', (req, res) => {
     const requiredFields = ['firstName', 'lastName', 'userName']
     requiredFields.forEach(field => {
@@ -65,12 +49,12 @@ app.post('/authors', (req, res) => {
         }
     })
     Author
-        .findOne({
+        .findOne({ //look for already-taken userName
             userName: req.body.userName
         })
         .then(author => {
             if (author) {
-                const message = `Username has been taken`
+                const message = `Username has been taken. Please choose another one.`
                 console.error(message)
                 return res.status(400).send(message)
             } else {
@@ -100,7 +84,7 @@ app.post('/authors', (req, res) => {
             })
         })
 })
-
+//PUT internal server error. GET req to user id returning blogposts
 app.put('/authors/:id', (req, res) => {
     if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
         res.status(400).json({
