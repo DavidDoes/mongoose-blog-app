@@ -162,18 +162,18 @@ app.get('/posts', (req, res) => {
         .find() //find a blog post by doing:
         .then(posts => {
             res.json(posts.map(post => { //map thru, return json object of posts with structure
-                    return {
-                        id: post._id,
-                        author: post.authorName,
-                        content: post.content,
-                        title: post.title
-                    }
-                }))
+                return {
+                    id: post._id,
+                    author: post.authorName,
+                    content: post.content,
+                    title: post.title
+                }
+            }))
         })
         .catch(err => {
-            console.error(err)
+            console.error(err);
             res.status(500).json({
-                message: 'Internal server error'
+                error: 'Internal server error'
             })
         })
 })
@@ -207,7 +207,7 @@ app.post('/posts', (req, res) => {
             return res.status(400).send(message)
         }
     }) //if all requiredFields present:
-    Author 
+    Author
         .findById(req.body.author_id) //get author id
         .then(author => {
             if (author) {
@@ -244,7 +244,7 @@ app.put('/posts/:id', (req, res) => { //if any of following not matching, return
     const toUpdate = {}
     const updateableFields = ['title', 'content'] //not required to update both
 
-    updateableFields.forEach(field => { 
+    updateableFields.forEach(field => {
         if (field in req.body) { //look for updateableFields in req body
             toUpdate[field] = req.body[field] //set toUpdate equal to req body's fields
         }
@@ -252,7 +252,7 @@ app.put('/posts/:id', (req, res) => { //if any of following not matching, return
 
     Blogpost // findByIdAndUpdate param 1 = value to change, param 2 = new value object
         .findByIdAndUpdate(req.params.id, {
-            $set: toUpdate 
+            $set: toUpdate
         }, {
             new: true //optional, true returns new document, false (default) returns previous
         })
