@@ -101,7 +101,7 @@ app.put('/authors/:id', (req, res) => {
     })
     Author
         .findOne({
-            userName: updated.userName || '',
+            userName: toUpdate.userName || '',
             _id: {
                 $ne: req.params.id
             }
@@ -114,7 +114,7 @@ app.put('/authors/:id', (req, res) => {
             } else {
                 Author
                     .findByIdAndUpdate(req.paramas.id, {
-                        $set: updated
+                        $set: toUpdate
                     }, {
                         new: true
                     })
