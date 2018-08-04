@@ -84,7 +84,7 @@ app.post('/authors', (req, res) => {
             })
         })
 })
-//PUT internal server error. GET req to user id returning blogposts
+
 app.put('/authors/:id', (req, res) => {
     if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
         res.status(400).json({
@@ -96,7 +96,7 @@ app.put('/authors/:id', (req, res) => {
     const updateableFields = ['firstName', 'lastName', 'userName']
     updateableFields.forEach(field => {
         if (field in req.body) {
-            updated[field] = req.body[field]
+            toUpdate[field] = req.body[field]
         }
     })
     Author
